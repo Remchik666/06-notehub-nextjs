@@ -50,55 +50,55 @@ export default function NoteForm({ onSuccess, onCancel }: NoteFormProps) {
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
         >
-        <Form className={css.form}>
-        <div className={css.formGroup}>
-            <label htmlFor="title">Title</label>
-            <Field id="title" name="title" className={css.input} />
-            <ErrorMessage name="title" component="div" className={css.error} />
-        </div>
+            <Form className={css.form}>
+                <div className={css.formGroup}>
+                    <label htmlFor="title">Title</label>
+                    <Field id="title" name="title" className={css.input} />
+                    <ErrorMessage name="title" component="div" className={css.error} />
+                </div>
 
-        <div className={css.formGroup}>
-            <label htmlFor="content">Content</label>
-            <Field
-                as="textarea"
-                id="content"
-                name="content"
-                rows={8}
-                className={css.textarea}
-            />
-            <ErrorMessage name="content" component="div" className={css.error} />
-        </div>
+                <div className={css.formGroup}>
+                    <label htmlFor="content">Content</label>
+                    <Field
+                        as="textarea"
+                        id="content"
+                        name="content"
+                        rows={8}
+                        className={css.textarea}
+                    />
+                    <ErrorMessage name="content" component="div" className={css.error} />
+                </div>
 
-        <div className={css.formGroup}>
-            <label htmlFor="tag">Tag</label>
-            <Field as="select" id="tag" name="tag" className={css.select}>
-                <option value="Todo">Todo</option>
-                <option value="Work">Work</option>
-                <option value="Personal">Personal</option>
-                <option value="Meeting">Meeting</option>
-                <option value="Shopping">Shopping</option>
-            </Field>
-            <ErrorMessage name="tag" component="div" className={css.error} />
-        </div>
+                <div className={css.formGroup}>
+                    <label htmlFor="tag">Tag</label>
+                    <Field as="select" id="tag" name="tag" className={css.select}>
+                        <option value="Todo">Todo</option>
+                        <option value="Work">Work</option>
+                        <option value="Personal">Personal</option>
+                        <option value="Meeting">Meeting</option>
+                        <option value="Shopping">Shopping</option>
+                    </Field>
+                    <ErrorMessage name="tag" component="div" className={css.error} />
+                </div>
 
-        <div className={css.actions}>
-            <button
-                type="button"
-                className={css.cancelButton}
-                disabled={mutation.isPending}
-                onClick={onCancel}
-            >
-            Cancel
-            </button>
-            <button
-                type="submit"
-                className={css.submitButton}
-                disabled={mutation.isPending}
-            >
-            {mutation.isPending ? 'Creating...' : 'Create note'}
-            </button>
-        </div>
-        </Form>
+                <div className={css.actions}>
+                    <button
+                        type="button"
+                        className={css.cancelButton}
+                        disabled={mutation.isPending}
+                        onClick={onCancel}
+                    >
+                    Cancel
+                    </button>
+                    <button
+                        type="submit"
+                        className={css.submitButton}
+                        disabled={mutation.isPending}
+                    >
+                    {mutation.isPending ? 'Creating...' : 'Create note'}
+                    </button>
+                </div>
+            </Form>
         </Formik>
     );
 }

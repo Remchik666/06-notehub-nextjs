@@ -1,33 +1,47 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, HydrationBoundary } from '@tanstack/react-query';
 import { fetchNoteById } from '@/lib/api';
-import { Note } from '@/types/note';
-import css from './NoteDetails.module.css';
+import { DehydratedState } from '@tanstack/react-query';
+import css from './NoteDetails.client.module.css';
 
-type Props = {
-    id: string;
-};
+interface NoteDetailsClientProps {
+    noteId: string;
+    dehydratedState: DehydratedState;
+}
 
-export default function NoteDetailsClient({ id }: Props) {
-    const { data, isLoading, isError } = useQuery<Note>({
-        queryKey: ['note', id],
-        queryFn: () => fetchNoteById(id),
+export default function NoteDetailsClient({ noteId, dehydratedState }: NoteDetailsClientProps) {
+    return (
+        <HydrationBoundary state={dehydratedState}>
+            <NoteDetails noteId={noteId} />
+        </HydrationBoundary>
+    );
+}
+
+function NoteDetails({ noteId }: { noteId: string }) {
+    const { data: note, isLoading, error } = useQuery({
+        queryKey: ['note', noteId],
+        queryFn: () => fetchNoteById(noteId),
         refetchOnMount: false,
     });
 
     if (isLoading) return <p>Loading, please wait...</p>;
-    if (isError) return <p>Something went wrong.</p>;
-    if (!data) return <p>Note not found</p>;
+
+    if (error) {
+        console.error('Error fetching note:', error);
+        return <p>Error: {(error as Error).message}</p>;
+    }
+
+    if (!note) return <p>No note found.</p>;
 
     return (
         <div className={css.container}>
             <div className={css.item}>
                 <div className={css.header}>
-                    <h2>{data.title}</h2>
+                    <h2>{note.title}</h2>
                 </div>
-                <p className={css.content}>{data.content}</p>
-                <p className={css.date}>{new Date(data.createdAt).toLocaleString()}</p>
+                <p className={css.content}>{note.content}</p>
+                <p className={css.date}>{new Date(note.createdAt).toLocaleDateString('en-US')}</p>
             </div>
         </div>
     );

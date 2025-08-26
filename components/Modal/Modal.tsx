@@ -1,32 +1,58 @@
-import { useEffect } from 'react';
+'use client';
+
+import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import css from '../Modal/Modal.module.css';
+import css from './Modal.module.css';
 
 interface ModalProps {
-    children: React.ReactNode;
     onClose: () => void;
+    children: React.ReactNode;
 }
 
-export default function Modal({ children, onClose }: ModalProps) {
-    useEffect(() => {
-        const handleKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
+export default function Modal({ onClose, children }: ModalProps) {
+    const [modalRoot, setModalRoot] = useState<HTMLElement | null>(null);
 
+    useEffect(() => {
+        setModalRoot(document.getElementById('modal-root'));
+
+        const originalOverflow = document.body.style.overflow;
         document.body.style.overflow = 'hidden';
 
-        window.addEventListener('keydown', handleKey);
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.code === 'Escape') {
+                onClose();
+            }
+        };
+        document.addEventListener('keydown', handleKeyDown);
 
         return () => {
-            document.body.style.overflow = '';
-            window.removeEventListener('keydown', handleKey);
+            document.body.style.overflow = originalOverflow; 
+            document.removeEventListener('keydown', handleKeyDown);
         };
     }, [onClose]);
 
+    const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (e.target === e.currentTarget) {
+            onClose();
+        }
+    };
+
+    if (!modalRoot) return null;
+
     return createPortal(
-        <div className={css.backdrop} onClick={onClose}>
-            <div className={css.modal} onClick={e => e.stopPropagation()}>
+        <div
+            className={css.backdrop}
+            role="dialog"
+            aria-modal="true"
+            onClick={handleBackdropClick}
+        >
+            <div className={css.modal}>
+                <button type="button" className={css.closeBtn} onClick={onClose}>
+                    &times;
+                </button>
                 {children}
             </div>
         </div>,
-    document.body
+        modalRoot,
     );
 }
