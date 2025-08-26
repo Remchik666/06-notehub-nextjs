@@ -3,7 +3,7 @@ import type { Note } from '@/types/note';
 import type { NewNote } from '../types/note';
 
 axios.defaults.baseURL = 'https://notehub-public.goit.study/api';
-const myKey = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
+const myKey = process.env.VITE_NOTEHUB_TOKEN;
 axios.defaults.headers.common['Authorization'] = `Bearer ${myKey}`;
 
 export interface FetchNotesParams {
