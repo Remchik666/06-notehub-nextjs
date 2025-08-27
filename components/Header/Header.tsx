@@ -1,12 +1,10 @@
-'use client';
-
-import Link from 'next/link';
-import css from './Header.module.css';
+import Link from "next/link"
+import css from "./Header.module.css"
 
 const Header = () => {
     return (
         <header className={css.header}>
-            <Link href="/" aria-label="Home" className={css.logo}>
+            <Link href="/" aria-label="Home">
                 NoteHub
             </Link>
             <nav aria-label="Main Navigation">
@@ -20,7 +18,8 @@ const Header = () => {
                 </ul>
             </nav>
         </header>
-    );
-};
+    
+    )
+}
 
 export default Header;
